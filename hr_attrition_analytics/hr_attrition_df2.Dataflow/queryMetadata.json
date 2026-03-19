@@ -1,0 +1,73 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "hr_attrition_df2",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "attendance_logs parquet": {
+      "queryId": "b61a94ec-f433-4c38-96e6-7d75da44fa42",
+      "queryName": "attendance_logs parquet",
+      "loadEnabled": false
+    },
+    "employee_details parquet": {
+      "queryId": "60d8d65e-9dc8-4537-bebd-ddb5a65421c7",
+      "queryName": "employee_details parquet",
+      "loadEnabled": false
+    },
+    "employee_salaries xlsx parquet": {
+      "queryId": "526aea15-9453-40a5-a7b2-4b5c6f55e8d5",
+      "queryName": "employee_salaries xlsx parquet",
+      "loadEnabled": false
+    },
+    "performance_reviews parquet": {
+      "queryId": "c86b1047-d497-40b4-a50b-c9600f4f7c4f",
+      "queryName": "performance_reviews parquet",
+      "loadEnabled": false
+    },
+    "resignation_logs parquet": {
+      "queryId": "2c28092b-6f33-45ad-9bdb-556614e1db3b",
+      "queryName": "resignation_logs parquet",
+      "loadEnabled": false
+    },
+    "attendance_logs parquet_DataDestination": {
+      "queryId": "b89677f1-f977-410d-b950-8deac2d56e22",
+      "queryName": "attendance_logs parquet_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "employee_details parquet_DataDestination": {
+      "queryId": "f975d8ec-cb0b-4f23-832d-c559a5f515d0",
+      "queryName": "employee_details parquet_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "employee_salaries xlsx parquet_DataDestination": {
+      "queryId": "5382282b-a1d6-405e-85ea-04ad7ea42479",
+      "queryName": "employee_salaries xlsx parquet_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "performance_reviews parquet_DataDestination": {
+      "queryId": "9d3ec77c-7550-492d-9814-16383ea7d226",
+      "queryName": "performance_reviews parquet_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "resignation_logs parquet_DataDestination": {
+      "queryId": "ebfc2b13-26b8-44ab-82a1-529207b2945c",
+      "queryName": "resignation_logs parquet_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"2c2bf839-1a06-4d41-8fee-bb7555a2374b\",\"DatasourceId\":\"504a3181-a16f-4e25-88d9-bd7f7a308fd6\"}"
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Script",
+        "typeProperties": {
+          "scripts": [
+            {
+              "text": {
+                "value": "truncate table staging_transactions_stage;",
+                "type": "Expression"
+              },
+              "type": "Query"
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        },
+        "linkedService": {
+          "name": "incremental_warehouse",
+          "properties": {
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "artifactId": "6abceef8-4063-4c4f-ad03-ceaf5b81b453",
+              "endpoint": "ztmn4aa7cswezmavudccwve7xe-t62fqs35r7euncq66hruo6b6bi.datawarehouse.fabric.microsoft.com",
+              "workspaceId": "4b58b49f-8f7d-46c9-8a1e-f1e347783e0a"
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "SCript_Truncate",
+        "dependsOn": []
+      },
+      {
+        "type": "SqlServerStoredProcedure",
+        "typeProperties": {
+          "storedProcedureName": "[dbo].[sp_upsert_transactions]"
+        },
+        "linkedService": {
+          "name": "incremental_warehouse",
+          "properties": {
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "artifactId": "6abceef8-4063-4c4f-ad03-ceaf5b81b453",
+              "endpoint": "ztmn4aa7cswezmavudccwve7xe-t62fqs35r7euncq66hruo6b6bi.datawarehouse.fabric.microsoft.com",
+              "workspaceId": "4b58b49f-8f7d-46c9-8a1e-f1e347783e0a"
+            },
+            "annotations": []
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "SP_INSERT_UPDATE_DATA",
+        "dependsOn": [
+          {
+            "activity": "Copy_Data_FromCSV_copy1",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "incremental_raw_parquet"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "incremental_data_lakehouse",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "5f824a4f-487b-b0c1-4c7e-8443559f74ec",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Tables"
+                  },
+                  "externalReferences": {
+                    "connection": "504a3181-a16f-4e25-88d9-bd7f7a308fd6"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "disableMetricsCollection": false,
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "staging_transactions_stage"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "incremental_warehouse",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "6abceef8-4063-4c4f-ad03-ceaf5b81b453",
+                    "endpoint": "ztmn4aa7cswezmavudccwve7xe-t62fqs35r7euncq66hruo6b6bi.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "4b58b49f-8f7d-46c9-8a1e-f1e347783e0a"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "txn_id",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "txn_id",
+                  "physicalType": "varchar",
+                  "length": "20"
+                }
+              },
+              {
+                "source": {
+                  "name": "store_id",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "store_id",
+                  "physicalType": "varchar",
+                  "length": "10"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_id",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "customer_id",
+                  "physicalType": "varchar",
+                  "length": "20"
+                }
+              },
+              {
+                "source": {
+                  "name": "txn_date",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "txn_date",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_id",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "product_id",
+                  "physicalType": "varchar",
+                  "length": "20"
+                }
+              },
+              {
+                "source": {
+                  "name": "quantity",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "quantity",
+                  "physicalType": "int"
+                }
+              },
+              {
+                "source": {
+                  "name": "unit_price",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "unit_price",
+                  "physicalType": "float"
+                }
+              },
+              {
+                "source": {
+                  "name": "total_amount",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "total_amount",
+                  "physicalType": "float"
+                }
+              },
+              {
+                "source": {
+                  "name": "last_updated",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "last_updated",
+                  "physicalType": "datetime2",
+                  "precision": 0
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy_Data_FromCSV_copy1",
+        "dependsOn": [
+          {
+            "activity": "SCript_Truncate",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

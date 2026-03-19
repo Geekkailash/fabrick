@@ -1,0 +1,65 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "hr_attrition_df2_merge",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "employee_details parquet": {
+      "queryId": "c42fa6f7-10f1-4c87-89a7-c1cc8d5ecb55",
+      "queryName": "employee_details parquet"
+    },
+    "employee_salaries xlsx parquet": {
+      "queryId": "abef19a3-8c68-4612-a5a7-d52257b3c0b0",
+      "queryName": "employee_salaries xlsx parquet"
+    },
+    "emp_Sal": {
+      "queryId": "55707790-7843-4cc8-844d-bc0625cc7b1a",
+      "queryName": "emp_Sal"
+    },
+    "emp_Salary": {
+      "queryId": "19c01145-4836-4895-b860-4f8dfe17699c",
+      "queryName": "emp_Salary"
+    },
+    "attendance_logs parquet": {
+      "queryId": "377504f2-1591-42b0-98ad-c8e9fc2a3e9c",
+      "queryName": "attendance_logs parquet"
+    },
+    "performance_reviews parquet": {
+      "queryId": "acf69cdd-bd4e-44f1-a107-198312343aa6",
+      "queryName": "performance_reviews parquet"
+    },
+    "resignation_logs parquet": {
+      "queryId": "65cbf30b-8673-40bb-8358-2c67c68d9ed9",
+      "queryName": "resignation_logs parquet"
+    },
+    "emp_salr_att": {
+      "queryId": "c072355d-048e-4c7f-8d15-585aaa0da283",
+      "queryName": "emp_salr_att"
+    },
+    "emp_sal_perf": {
+      "queryId": "836c5d04-65a7-4aec-8d5c-bf07aaea2d9f",
+      "queryName": "emp_sal_perf"
+    },
+    "Merge": {
+      "queryId": "04dd3d0f-bf29-49c3-a663-4f447b5663e2",
+      "queryName": "Merge",
+      "loadEnabled": false
+    },
+    "Merge_DataDestination": {
+      "queryId": "4abea20e-17d6-436c-a577-f0c7a3996f8d",
+      "queryName": "Merge_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"2c2bf839-1a06-4d41-8fee-bb7555a2374b\",\"DatasourceId\":\"504a3181-a16f-4e25-88d9-bd7f7a308fd6\"}"
+    }
+  ]
+}
