@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "hr_attrition_df2"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b774b18b-2d74-b3de-40f4-d26e69ab760f"
+  }
+}
