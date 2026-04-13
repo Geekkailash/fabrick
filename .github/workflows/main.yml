@@ -1,0 +1,40 @@
+name: Fabric Minimal Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      AZURE_CLIENT_ID: "10ba06ec-5c16-42d7-86e2-7b23be0eb46e"
+      AZURE_TENANT_ID: "00ded8cc-141f-4cac-b015-a0c42b549fb9"
+      AZURE_SUBSCRIPTION_ID: "6543dcd3-8425-440c-b484-b3dae7e4a845"
+      WORKSPACE_ID: "6543dcd3-8425-440c-b484-b3dae7e4a845"
+      LAKEHOUSE_ID: "1af7677c-9006-4c30-aa5f-af8c4499b8fc"
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify Azure Login
+        run: az account show
+
+      - name: Get Fabric Token
+        run: |
+          TOKEN=$(az account get-access-token \
+            --resource https://api.fabric.microsoft.com \
+            --query accessToken -o tsv)
+
+          echo "Token retrieved successfully"
+          echo "FABRIC_TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Test Fabric API (List Lakehouses)
+        run: |
+          curl -X GET "https://api.fabric.microsoft.com/v1/workspaces/$WORKSPACE_ID/lakehouses" \
+          -H "Authorization: Bearer $FABRIC_TOKEN"
