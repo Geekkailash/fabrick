@@ -32,8 +32,6 @@
 # MAGIC INSERT INTO employees VALUES (1, 'Fabric User');
 # MAGIC 
 # MAGIC SELECT * FROM employees;
-# MAGIC 
-# MAGIC DROP TABLE employees
 
 # METADATA ********************
 
