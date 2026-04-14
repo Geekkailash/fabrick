@@ -47,6 +47,7 @@ jobs:
                     "clientSecret": "${{ env.AZURE_CLIENT_SECRET }}",
                     "tenantId": "${{ env.AZURE_TENANT_ID }}"
                   }
+          allow-no-subscriptions: true
       - name: Run SQL Script
         run: |
           /opt/mssql-tools18/bin/sqlcmd \
