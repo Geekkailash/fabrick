@@ -34,7 +34,7 @@ jobs:
             }
           allow-no-subscriptions: true
 
-      # ✅ Trigger Fabric Notebook
+      # ✅ Trigger Fabric Notebook (with full debug)
       - name: Trigger Fabric Notebook
         run: |
           echo "Getting Fabric access token..."
@@ -43,9 +43,9 @@ jobs:
             --resource https://api.fabric.microsoft.com \
             --query accessToken -o tsv)
 
-          echo "Triggering notebook run..."
+          echo "Calling Fabric API..."
 
-          RESPONSE=$(curl -s -X POST \
+          curl -i -X POST \
             "https://api.fabric.microsoft.com/v1/workspaces/$WORKSPACE_ID/items/$ITEM_ID/jobs/instances?jobType=RunNotebook" \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
@@ -53,9 +53,6 @@ jobs:
               "executionData": {
                 "parameters": {}
               }
-            }')
+            }'
 
-          echo "Response:"
-          echo $RESPONSE
-
-          echo "Notebook triggered successfully 🚀"
+          echo "Notebook trigger request sent 🚀"
