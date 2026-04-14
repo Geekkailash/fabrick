@@ -43,6 +43,7 @@ jobs:
           client-id: ${{ env.AZURE_CLIENT_ID }}
           tenant-id: ${{ env.AZURE_TENANT_ID }}
           client-secret: ${{ env.AZURE_CLIENT_SECRET }}
+          allow-no-subscriptions: true
 
       # ✅ Execute SQL script
       - name: Run SQL Script
