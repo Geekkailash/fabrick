@@ -16,26 +16,27 @@ jobs:
       FABRIC_DATABASE: "hr_attrition_lakehouse"
 
     steps:
+      # ✅ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ✅ Install sqlcmd (v18)
-      - name: Install sqlcmd
+      # ✅ Install ODBC + Python dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl gnupg
+          sudo apt-get install -y curl gnupg unixodbc-dev python3-pip
 
+          # Add Microsoft repo
           curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-
           curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list \
             | sudo tee /etc/apt/sources.list.d/mssql-release.list
 
           sudo apt-get update
-          sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18 unixodbc-dev
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
-          echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+          pip install pyodbc
 
-      # ✅ Azure Login (Service Principal via creds JSON)
+      # ✅ Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -48,7 +49,7 @@ jobs:
             }
           allow-no-subscriptions: true
 
-      # ✅ Debug (helps confirm file path)
+      # ✅ Debug files (optional but useful first run)
       - name: Debug files
         run: |
           echo "Current directory:"
@@ -56,20 +57,17 @@ jobs:
           echo "Files:"
           ls -R
 
-      # ✅ Run SQL using ACCESS TOKEN (correct method)
+      # ✅ Run SQL using Python script
       - name: Run SQL Script
         run: |
           echo "Getting access token..."
-      
+
           ACCESS_TOKEN=$(az account get-access-token \
             --resource https://database.windows.net \
             --query accessToken -o tsv)
-      
+
+          export ACCESS_TOKEN
+
           echo "Executing SQL script..."
-      
-          export SQLCMDACCESS_TOKEN="$ACCESS_TOKEN"
-      
-          /opt/mssql-tools18/bin/sqlcmd \
-            -S $FABRIC_SQL_SERVER \
-            -d $FABRIC_DATABASE \
-            -i ./sql/script.sql
+
+          python scripts/run_sql.py
