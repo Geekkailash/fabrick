@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AZURE_CLIENT_ID: "10ba06ec-5c16-42d7-86e2-7b23be0eb46e"
+      AZURE_CLIENT_ID: "580dfb7a-ccbd-422b-b214-f2470a0c9a7e"
       AZURE_TENANT_ID: "00ded8cc-141f-4cac-b015-a0c42b549fb9"
       AZURE_CLIENT_SECRET: "MgR8Q~_9GqEcAkexGcXyxIwmMlZpUZ85xnoCBaMf"
       WORKSPACE_ID: "4b58b49f-8f7d-46c9-8a1e-f1e347783e0a"
