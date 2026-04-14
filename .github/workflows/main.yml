@@ -57,17 +57,15 @@ jobs:
           echo "Files:"
           ls -R
 
-      # ✅ Run SQL using Python script
-      - name: Run SQL Script
+      - name: Execute SQL via REST
         run: |
-          echo "Getting access token..."
-
           ACCESS_TOKEN=$(az account get-access-token \
             --resource https://database.windows.net \
             --query accessToken -o tsv)
-
-          export ACCESS_TOKEN
-
-          echo "Executing SQL script..."
-
-          python scripts/run_sql.py
+      
+          SQL_QUERY=$(cat ./sql/script.sql | sed ':a;N;$!ba;s/\n/ /g')
+      
+          curl -X POST "https://$FABRIC_SQL_SERVER/query" \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\": \"$SQL_QUERY\"}"
