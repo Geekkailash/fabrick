@@ -1,0 +1,71 @@
+name: Deploy SQL to Fabric Lakehouse
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AZURE_CLIENT_ID: "580dfb7a-ccbd-422b-b214-f2470a0c9a7e"
+      AZURE_TENANT_ID: "00ded8cc-141f-4cac-b015-a0c42b549fb9"
+      AZURE_CLIENT_SECRET: "MgR8Q~_9GqEcAkexGcXyxIwmMlZpUZ85xnoCBaMf"
+      FABRIC_SQL_SERVER: "ztmn4aa7cswezmavudccwve7xe-t62fqs35r7euncq66hruo6b6bi.datawarehouse.fabric.microsoft.com"
+      FABRIC_DATABASE: "hr_attrition_lakehouse"
+
+    steps:
+      # ✅ Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ✅ Install ODBC + Python dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg unixodbc-dev python3-pip
+
+          # Add Microsoft repo
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list \
+            | sudo tee /etc/apt/sources.list.d/mssql-release.list
+
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17
+
+          pip install pyodbc
+
+      # ✅ Azure Login
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          auth-type: SERVICE_PRINCIPAL
+          creds: |
+            {
+              "clientId": "${{ env.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ env.AZURE_CLIENT_SECRET }}",
+              "tenantId": "${{ env.AZURE_TENANT_ID }}"
+            }
+          allow-no-subscriptions: true
+
+      # ✅ Debug files (optional but useful first run)
+      - name: Debug files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files:"
+          ls -R
+
+      - name: Execute SQL via REST
+        run: |
+          ACCESS_TOKEN=$(az account get-access-token \
+            --resource https://database.windows.net \
+            --query accessToken -o tsv)
+      
+          SQL_QUERY=$(cat ./sql/script.sql | sed ':a;N;$!ba;s/\n/ /g')
+      
+          curl -X POST "https://$FABRIC_SQL_SERVER/query" \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\": \"$SQL_QUERY\"}"
