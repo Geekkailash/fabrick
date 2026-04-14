@@ -60,17 +60,16 @@ jobs:
       - name: Run SQL Script
         run: |
           echo "Getting access token..."
-
+      
           ACCESS_TOKEN=$(az account get-access-token \
             --resource https://database.windows.net \
             --query accessToken -o tsv)
-
+      
           echo "Executing SQL script..."
-
+      
           export SQLCMDACCESS_TOKEN="$ACCESS_TOKEN"
-
+      
           /opt/mssql-tools18/bin/sqlcmd \
             -S $FABRIC_SQL_SERVER \
             -d $FABRIC_DATABASE \
-            -G \
             -i ./sql/script.sql
