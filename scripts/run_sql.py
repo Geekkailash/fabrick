@@ -5,7 +5,7 @@ server = os.environ['FABRIC_SQL_SERVER']
 database = os.environ['FABRIC_DATABASE']
 token = os.environ['ACCESS_TOKEN']
 
-conn_str = f"Driver={{ODBC Driver 18 for SQL Server}};Server={server};Database={database};Encrypt=yes;TrustServerCertificate=no;"
+conn_str = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};Encrypt=yes;TrustServerCertificate=no;"
 
 conn = pyodbc.connect(conn_str, attrs_before={
     1256: bytes(token, 'utf-8')
