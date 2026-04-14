@@ -11,7 +11,7 @@ jobs:
     env:
       AZURE_CLIENT_ID: "580dfb7a-ccbd-422b-b214-f2470a0c9a7e"
       AZURE_TENANT_ID: "00ded8cc-141f-4cac-b015-a0c42b549fb9"
-      AZURE_CLIENT_SECRET: "564c4731-31bf-429b-9255-3f6a7aa2fb64"
+      AZURE_CLIENT_SECRET: "MgR8Q~_9GqEcAkexGcXyxIwmMlZpUZ85xnoCBaMf"
       FABRIC_SQL_SERVER: "ztmn4aa7cswezmavudccwve7xe-t62fqs35r7euncq66hruo6b6bi.datawarehouse.fabric.microsoft.com"
       FABRIC_DATABASE: "hr_attrition_lakehouse"
 
