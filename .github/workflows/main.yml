@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ✅ Install sqlcmd (fixed version)
+      # ✅ Install sqlcmd (v18)
       - name: Install sqlcmd
         run: |
           sudo apt-get update
@@ -34,24 +34,42 @@ jobs:
           sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18 unixodbc-dev
 
           echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
-          source ~/.bashrc
 
-      # ✅ Login using Entra ID (Service Principal)
+      # ✅ Azure Login (Service Principal)
       - name: Azure Login
         uses: azure/login@v2
         with:
           auth-type: SERVICE_PRINCIPAL
           creds: |
-                  {
-                    "clientId": "${{ env.AZURE_CLIENT_ID }}",
-                    "clientSecret": "${{ env.AZURE_CLIENT_SECRET }}",
-                    "tenantId": "${{ env.AZURE_TENANT_ID }}"
-                  }
+            {
+              "clientId": "${{ env.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ env.AZURE_CLIENT_SECRET }}",
+              "tenantId": "${{ env.AZURE_TENANT_ID }}"
+            }
           allow-no-subscriptions: true
+
+      # ✅ Debug (optional but helpful first time)
+      - name: Debug files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files:"
+          ls -R
+
+      # ✅ Run SQL using access token (FINAL FIX)
       - name: Run SQL Script
         run: |
+          echo "Getting access token..."
+
+          ACCESS_TOKEN=$(az account get-access-token \
+            --resource https://database.windows.net \
+            --query accessToken -o tsv)
+
+          echo "Executing SQL script..."
+
           /opt/mssql-tools18/bin/sqlcmd \
             -S $FABRIC_SQL_SERVER \
             -d $FABRIC_DATABASE \
             -G \
+            -P "$ACCESS_TOKEN" \
             -i ./sql/script.sql
