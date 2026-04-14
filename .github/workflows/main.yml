@@ -14,14 +14,14 @@ jobs:
       AZURE_TENANT_ID: "00ded8cc-141f-4cac-b015-a0c42b549fb9"
       AZURE_CLIENT_SECRET: "MgR8Q~_9GqEcAkexGcXyxIwmMlZpUZ85xnoCBaMf"
       WORKSPACE_ID: "4b58b49f-8f7d-46c9-8a1e-f1e347783e0a"
-      ITEM_ID: "0f816928-23e5-4d3f-b0d5-5798ef5537c"
+      ITEM_ID: "0f816928-23e5-4d3f-b0d5-5798ef5537c2"
 
     steps:
-      # ✅ Checkout repo
+      # ✅ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ✅ Azure Login (Service Principal)
+      # ✅ Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -38,19 +38,23 @@ jobs:
       - name: Trigger Fabric Notebook
         run: |
           echo "Getting Fabric access token..."
-      
+
           ACCESS_TOKEN=$(az account get-access-token \
             --resource https://api.fabric.microsoft.com \
             --query accessToken -o tsv)
-      
+
           echo "Triggering notebook run..."
-      
+
           RESPONSE=$(curl -s -X POST \
             "https://api.fabric.microsoft.com/v1/workspaces/$WORKSPACE_ID/items/$ITEM_ID/jobs/instances?jobType=RunNotebook" \
             -H "Authorization: Bearer $ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{}')
-      
+            -d '{
+              "executionData": {
+                "parameters": {}
+              }
+            }')
+
           echo "Response:"
           echo $RESPONSE
 
