@@ -41,12 +41,12 @@ jobs:
         uses: azure/login@v2
         with:
           auth-type: SERVICE_PRINCIPAL
-          client-id: ${{ env.AZURE_CLIENT_ID }}
-          tenant-id: ${{ env.AZURE_TENANT_ID }}
-          client-secret: ${{ env.AZURE_CLIENT_SECRET }}
-          allow-no-subscriptions: true
-
-      # ✅ Execute SQL script
+          creds: |
+                  {
+                    "clientId": "${{ env.AZURE_CLIENT_ID }}",
+                    "clientSecret": "${{ env.AZURE_CLIENT_SECRET }}",
+                    "tenantId": "${{ env.AZURE_TENANT_ID }}"
+                  }
       - name: Run SQL Script
         run: |
           /opt/mssql-tools18/bin/sqlcmd \
