@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "incemental_pl"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a563d141-4aff-a688-4c0f-0b47e8fded9e"
+  }
+}

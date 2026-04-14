@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "incemental_df2_copy_staged_data"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7c66016f-0ee5-b197-4c77-fce435699314"
+  }
+}
